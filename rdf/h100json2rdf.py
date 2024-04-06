@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 # Create Turtle RDF from the JSON Billboard Hot 100 JSON data at
-# https://github.com/mhollingshead/billboard-hot-100. See Fork at
-# *****
+# https://github.com/mhollingshead/billboard-hot-100. 
 
 # run as
-# ./json2rdf.py ../all.json
+# ./h100json2rdf.py ../all.json
 
 import json
 import sys
