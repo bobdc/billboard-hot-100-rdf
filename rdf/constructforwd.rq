@@ -1,0 +1,37 @@
+#2024-03-31T17:55:04 the following worked with no limit, took 27 minutes, and created 4,909 triples. 
+#curl -X POST --data-urlencode "query@constructforwd.rq" http://localhost:7200/repositories/billboard-hot-100
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX h1: <http://rdfdata.org/hot100#> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+
+CONSTRUCT { ?artist mads:hasCloseExternalAuthority ?wdURI }
+WHERE {
+    
+  ?artist a h1:musicalArtist ;
+  rdfs:label ?artistName .
+  #MINUS { ?artist mads:hasCloseExternalAuthority ?wdURI }
+    
+  SERVICE <https://query.wikidata.org/sparql> {
+   
+     # Check if artist a musician (a human with a value for instrument; singers
+     # and rappers listed with "instrument" of "voice") or a musical group. 
+     { 
+       ?wdURI rdfs:label ?artistName;
+                  wdt:P31  wd:Q5 ;        # instance of human
+                  wdt:P1303 ?instrument . 
+     }
+     UNION
+     {
+       ?wdURI rdfs:label ?artistName ;
+                  wdt:P31 wd:Q215380 . # instance of musical group
+     }
+ } # end of SERVICE
+}
+#LIMIT 20000   # 3000 worked from curl (later didn't, then did); 6000 didn't, 5000 didn't, even with a 10 minute timeout (-m 600) with curl
+
+# 2024-03-31T17:10:36 20000 worked (accepting default of N-triples and not Turtle)
