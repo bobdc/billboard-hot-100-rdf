@@ -53,7 +53,7 @@ for week in jsonData:
 
         print(artistURI + ' a h1:MusicalArtist ; ')
         print('   rdfs:label "' + artistName + '"@en .\n')
-        print(songURI + ' a schema:Recording;')
+        print(songURI + ' a schema:MusicRecording;')
         print('     schema:byArtist ' + artistURI + ';')
         print('     dc:title ' + '"' + songName + '";')
         print('     h1:charted ' + '"' + chartDate + '"^^xsd:date {| ')
